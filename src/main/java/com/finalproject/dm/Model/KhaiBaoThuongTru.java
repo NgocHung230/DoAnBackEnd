@@ -28,9 +28,6 @@ public class KhaiBaoThuongTru {
     private String noiDungDeNghi;
     private FileHoSo fileHoSoLienQuan;
     private BigDecimal lePhi;
-    private String ngayVang;
-    private String ngayVe;
-    private String lyDoTamVang;
     private String idUser;
     private String trangThai;
     private String idNguoiDuyet;

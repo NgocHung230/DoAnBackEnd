@@ -40,10 +40,10 @@ public class VanBanPhapLuatController {
     }
     
     @PutMapping("/updateVBPL")
-    public ResponseEntity<VanBanPhapLuat> updateVBPL(@RequestBody VanBanPhapLuat vbpl) {
+    public ResponseEntity updateVBPL(@RequestBody VanBanPhapLuat vbpl) {
         //TODO: process POST request
-        
-        return ResponseEntity.ok(VBPLService.updateBanPhapLuat(vbpl));
+        VBPLService.updateBanPhapLuat(vbpl);
+        return ResponseEntity.ok("Thành công!");
     }
 
     @DeleteMapping("/deleteVBPL/{id}")

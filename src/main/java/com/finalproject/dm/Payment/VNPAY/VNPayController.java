@@ -25,6 +25,7 @@ import java.util.TimeZone;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,9 +35,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping()
 public class VNPayController {
 
-    @GetMapping("pay")
-	public String getPay(@PathParam("price") long price,@PathParam("id") String contractId) throws UnsupportedEncodingException{
-		
+    @GetMapping("pay/{price}/{id}")
+	public String getPay(@PathVariable("price") long price,@PathVariable("id") String contractId) throws UnsupportedEncodingException{
+		System.out.println("Chạy****");
 		String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
@@ -105,29 +106,25 @@ public class VNPayController {
 	}
     
 
-    @GetMapping("payment-callback")
-    public ResponseEntity<String> paymentCallback(@RequestParam Map<String, String> queryParams,HttpServletResponse response) throws IOException {
+    @GetMapping("/payment-callback")
+    public ResponseEntity<String> paymentCallback(@RequestParam Map<String, String> queryParams, HttpServletResponse response) throws IOException {
         String vnp_ResponseCode = queryParams.get("vnp_ResponseCode");
         String contractId = queryParams.get("contractId");
         String registerServiceId = queryParams.get("registerServiceId");
         String billId = queryParams.get("billId");
-        if(contractId!= null && !contractId.equals("")) {
+
+        if (contractId != null && !contractId.equals("")) {
             if ("00".equals(vnp_ResponseCode)) {
                 // Giao dịch thành công
                 // Thực hiện các xử lý cần thiết, ví dụ: cập nhật CSDL
                 return ResponseEntity.ok("Thanh toán thành công!");
             } else {
                 // Giao dịch thất bại
-                // Thực hiện các xử lý cần thiết, ví dụ: không cập nhật CSDL\
+                // Thực hiện các xử lý cần thiết, ví dụ: không cập nhật CSDL
                 return ResponseEntity.badRequest().body("Thanh toán thất bại!");
-
-                
             }
         }
         return ResponseEntity.badRequest().body("Lỗi thanh toán!");
-        
-        
-
     }
     
 }

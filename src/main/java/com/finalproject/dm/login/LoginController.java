@@ -114,4 +114,5 @@ public class LoginController {
         return ResponseEntity.ok(loginService.validateToken(token));
     }
     
+    
 }

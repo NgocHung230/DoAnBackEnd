@@ -22,6 +22,7 @@ public class KhaiBaoThuongTruController {
 
     @PostMapping("/KhaiBaoThuongTru/create")
     public ResponseEntity<KhaiBaoThuongTru> createKhaiBaoThuongTru(@RequestBody KhaiBaoThuongTru data) {
+        System.out.println("Chạy****");
         return ResponseEntity.ok(khaiBaoThuongTruService.createKhaiBaoThuongTru(data));
     }
 
