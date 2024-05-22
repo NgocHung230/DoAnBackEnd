@@ -18,4 +18,7 @@ public interface ThongKeDoanhThuRepo extends MongoRepository<ThongKeDoanhThu,Str
 
     List<ThongKeDoanhThu> findAllByNam(int nam);
 
+    @Query("{'diaChiCoQuan':?0,'nam':?1}")
+    List<ThongKeDoanhThu> findAllByCoQuanAndNam(DiaChi coQuan,Integer nam);
+
 }

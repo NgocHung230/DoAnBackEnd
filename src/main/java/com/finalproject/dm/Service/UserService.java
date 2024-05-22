@@ -8,8 +8,11 @@ import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.finalproject.dm.Model.DiaChi;
+import com.finalproject.dm.Model.QuenMatKhau;
 import com.finalproject.dm.Model.User;
 import com.finalproject.dm.Repository.UserRepo;
 
@@ -69,11 +72,15 @@ public class UserService {
 
     public User updateUser(User userRequest)
     {
+        System.out.println(userRequest);
         User user=repo.findById(userRequest.getIdUser()).get();
+        System.out.println(user);
         user.setRole(userRequest.getRole());
         user.setTinhTrangTK(userRequest.getTinhTrangTK());
         user.setSdt(userRequest.getSdt());
         user.setUpdated_at(getTimeString());
+        user.setMatKhau(userRequest.getMatKhau());
+        user.setIdNguoiDuyet(userRequest.getIdNguoiDuyet());
         return repo.save(user);
     }
 
@@ -93,9 +100,11 @@ public class UserService {
         return "Phê duyệt thành công!";
     }
 
-    public List<User> getUserChoPheDuyet()
+    public List<User> getUserChoPheDuyet(DiaChi diaChiDKTK)
     {
-        return repo.getChoPheDuyet("Checking");
+        // System.out.println("Chạy lay list user cho phe duyet");
+        // System.out.println(repo.getChoPheDuyetDiaChi("Checking",diaChiDKTK,"User"));
+        return repo.getChoPheDuyetDiaChi("Checking",diaChiDKTK,"User");
 
     }
     // public User updateTinhTrangTKUser(User user){
@@ -112,4 +121,32 @@ public class UserService {
         user.setTinhTrangTK("Active");
         return repo.save(user);
     }
+
+    public ResponseEntity changePassword(QuenMatKhau data){
+
+        User user = repo.findById(data.getIdUser()).get();
+        if (BCrypt.checkpw(data.getOldPass(), user.getMatKhau())){
+            user.setMatKhau(BCrypt.hashpw(data.getNewPass(), BCrypt.gensalt()));
+            repo.save(user);
+        }
+        else return ResponseEntity.ok("Mật khẩu cũ không đúng!");
+        return ResponseEntity.ok("Đổi mật khẩu thành công!");
+    }
+
+    public User addEmployee(User user){
+        user.setIdUser(UUID.randomUUID().toString().split("-")[0]);
+        String formattedTime = getTimeString();
+        user.setCreated_at(formattedTime);
+        user.setMatKhau(BCrypt.hashpw(user.getMatKhau(), BCrypt.gensalt()));
+        user.setRole("Employee");
+        user.setTinhTrangTK("Active");
+        return repo.save(user);
+    }
+
+    public ResponseEntity getAllEmployeeByCoQuan(DiaChi coQuan){
+
+        return ResponseEntity.ok(repo.findAllByDiaChiDKTK(coQuan,"Employee"));
+    }
+
+    
 }

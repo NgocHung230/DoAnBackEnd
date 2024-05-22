@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import com.finalproject.dm.Model.DiaChi;
 import com.finalproject.dm.Model.ThongBaoLuuTru;
 
 public interface ThongBaoLuuTruRepo extends MongoRepository<ThongBaoLuuTru,String>{
@@ -15,5 +16,8 @@ public interface ThongBaoLuuTruRepo extends MongoRepository<ThongBaoLuuTru,Strin
 
     @Query("{'idUser': ?0}")
     List<ThongBaoLuuTru> getAllByIdUser(String idUser, Sort sort);
+
+    @Query("{'trangThai': ?0,'coQuanThucHien':?1}")
+    List<ThongBaoLuuTru> getAllByPheDuyetByDiaChiIdUser(String trangThai, DiaChi coQuanThucHien, Sort sort);
 
 }

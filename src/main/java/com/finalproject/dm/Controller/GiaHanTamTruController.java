@@ -31,10 +31,11 @@ public class GiaHanTamTruController {
     @GetMapping("/GiaHanTamTru/{id}")
     public ResponseEntity<GiaHanTamTru> getGiaHanTamTru(@PathVariable String id) {
         return ResponseEntity.ok(giaHanTamTruService.getGiaHanTamTruById(id));
-    }
+    }  
     
     @PutMapping("/GiaHanTamTru/update")
     public ResponseEntity<GiaHanTamTru> updateGiaHanTamTru(@RequestBody GiaHanTamTru data) {
+        System.out.println(data);
         return ResponseEntity.ok(giaHanTamTruService.updateGiaHanTamTru(data));
     }
     

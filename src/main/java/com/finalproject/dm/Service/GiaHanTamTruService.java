@@ -50,9 +50,10 @@ public class GiaHanTamTruService {
         ghtt.setYKien(data.getYKien());
         ghtt.setFileHoSoLienQuan(data.getFileHoSoLienQuan());
         ghtt.setLePhi(data.getLePhi());
-        ghtt.setTrangThai("Checking");
+        ghtt.setTrangThai(data.getTrangThai());
         ghtt.setIdNguoiDuyet(data.getIdNguoiDuyet());
         ghtt.setCreated_at(LocalDateTime.now());
+        ghtt.setNote(data.getNote());
         return repo.save(ghtt);
     }
 

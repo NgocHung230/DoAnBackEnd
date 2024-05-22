@@ -23,6 +23,9 @@ public class KhaiBaoTamVangService {
         data.setTrangThai("Checking");
         return repo.save(data);
     }
+
+
+
     public List<KhaiBaoTamVang> getAllKhaiBaoTamVang(){
         return repo.findAll();
     }
@@ -34,16 +37,17 @@ public class KhaiBaoTamVangService {
     public KhaiBaoTamVang updateKhaiBaoTamVang(KhaiBaoTamVang data){
         KhaiBaoTamVang kbtv = repo.findById(data.getId()).get();
         kbtv.setCoQuanThucHien(data.getCoQuanThucHien());
-        kbtv.setDiaChi(data.getDiaChi());
+        kbtv.setDiaChi(data.getDiaChi()); 
         kbtv.setDiaChiCuThe(data.getDiaChiCuThe());
         kbtv.setNgayVang(data.getNgayVang());
         kbtv.setNgayVe(data.getNgayVe());
         kbtv.setLyDoTamVang(data.getLyDoTamVang());
         kbtv.setFileHoSoLienQuan(data.getFileHoSoLienQuan());
         kbtv.setLePhi(data.getLePhi());
-        kbtv.setTrangThai("Checking");
+        kbtv.setTrangThai(data.getTrangThai());
         kbtv.setIdNguoiDuyet(data.getIdNguoiDuyet());
         kbtv.setCreated_at(LocalDateTime.now());
+        kbtv.setNote(data.getNote());
         return repo.save(kbtv);
     }
 

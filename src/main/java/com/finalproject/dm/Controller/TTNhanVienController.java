@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.finalproject.dm.Model.DiaChi;
 import com.finalproject.dm.Model.ThongTinNhanVien;
 import com.finalproject.dm.Service.ThongTinNhanVienService;
 
@@ -28,6 +29,8 @@ public class TTNhanVienController {
     //Lấy thông tin cá nhân bằng idUser
     @GetMapping("/TTNV/get/{idUser}")
     public ResponseEntity<ThongTinNhanVien> getTTNV(@PathVariable String idUser) {
+        System.out.println("Đang lấy TTNV "+idUser);
+        System.out.println(ttnvService.getTTNVByIdUser(idUser));
         return ResponseEntity.ok(ttnvService.getTTNVByIdUser(idUser));
     }
 
@@ -49,6 +52,14 @@ public class TTNhanVienController {
     public ResponseEntity<String> deleteTTNV(@PathVariable String idUser){
         return ResponseEntity.ok(ttnvService.deleteTTNV(idUser));
     }
+
+    // @PostMapping("/manager/getAllEmployee")
+    // public ResponseEntity getAllEmployee(@RequestBody DiaChi coQuan) {
+    //     //TODO: process POST request
+        
+    //     return ttnvService.getAllEmployeeByCoQuan(coQuan);
+    // }
+    
     
     
 }

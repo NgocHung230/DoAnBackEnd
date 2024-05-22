@@ -38,8 +38,9 @@ public class XoaDangKyTamTruService {
         xdktt.setNoiDungDeNghi(data.getNoiDungDeNghi());
         xdktt.setFileHoSoLienQuan(data.getFileHoSoLienQuan());
         xdktt.setLePhi(data.getLePhi());
-        xdktt.setTrangThai("Checking");
+        xdktt.setTrangThai(data.getTrangThai());
         xdktt.setIdNguoiDuyet(data.getIdNguoiDuyet());
+        xdktt.setNote(data.getNote());
         xdktt.setCreated_at(LocalDateTime.now());
         return repo.save(xdktt);
     }

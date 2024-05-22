@@ -62,13 +62,14 @@ public class QuenMatKhauController {
     public ResponseEntity<String> setNewPassword(@RequestBody FormQuenMatKhau data) {
         //TODO: process POST request
         List<User> L = userService.getUserByCCCD(data.getCccd());
+        System.out.println(data);
         if (L.size()==0) return ResponseEntity.badRequest().body("Không tìm thấy tài khoản!");
-        // System.out.println("chạy");
+        System.out.println(data.getMatKhauMoi());
         User user=L.get(0);
         System.out.println(user);
         String newPw = BCrypt.hashpw(data.getMatKhauMoi(), BCrypt.gensalt());
         user.setMatKhau(newPw);
-        // userService.updateUser(user);
+        userService.updateUser(user);
         return ResponseEntity.ok("Thay đổi mật khẩu thành công!!");
     }
     public int sendCodeQuenMatKhau(String email) {

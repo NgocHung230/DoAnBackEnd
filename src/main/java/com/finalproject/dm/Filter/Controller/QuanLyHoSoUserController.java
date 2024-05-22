@@ -5,11 +5,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.finalproject.dm.Email.EmailService;
 import com.finalproject.dm.Filter.Model.FormQuanLyHoSo;
 import com.finalproject.dm.Filter.Service.QuanLyHoSoUserService;
+import com.finalproject.dm.Model.DiaChi;
 
 import java.util.Random;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 
@@ -29,6 +33,8 @@ public class QuanLyHoSoUserController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     //Lấy hồ sơ đang chờ duyệt
     @GetMapping("/QuanLyHoSoUserChecking/{idUser}")
@@ -169,4 +175,11 @@ public class QuanLyHoSoUserController {
         String body = "Bạn đã thanh toán thành công hồ sơ! Vui lòng đợi kết quả trả về! Cảm ơn sự ủng hộ của bạn !!";
         emailService.sendEmail(email, subject, body);
     }
+    @PostMapping("/getAllHoSoCheckingByCoQuan")
+    public ResponseEntity getAllHoSoCheckingByCoQuan(@RequestBody DiaChi diaChi) {
+        //TODO: process POST request
+        
+        return ResponseEntity.ok(quanLyHoSoUserService.getAllHoSoPheDuyet(diaChi));
+    }
+    
 }

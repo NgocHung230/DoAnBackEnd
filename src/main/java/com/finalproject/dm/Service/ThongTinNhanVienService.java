@@ -5,8 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.finalproject.dm.Model.DiaChi;
 import com.finalproject.dm.Model.ThongTinNhanVien;
 import com.finalproject.dm.Repository.ThongTinNhanVienRepo;
 
@@ -58,6 +60,11 @@ public class ThongTinNhanVienService {
     {
         repo.deleteByIdUser(idUser);
         return "Xoá thông tin Nhân viên thành công!";
+    }
+
+    public ResponseEntity getAllEmployeeByCoQuan(DiaChi coQuan){
+
+        return ResponseEntity.ok(repo.findAllByCoQuan(coQuan));
     }
 
 }

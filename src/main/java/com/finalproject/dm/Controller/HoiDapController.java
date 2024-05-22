@@ -8,6 +8,7 @@ import com.finalproject.dm.Service.HoiDapService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,11 +43,17 @@ public class HoiDapController {
         return hoiDapService.createHoiDap(data);
     }
 
-    @PutMapping("updateHoiDap")
-    public HoiDap updateHoiDap(@RequestBody HoiDap data) {
+    @PutMapping("/updateHoiDap")
+    public ResponseEntity updateHoiDap(@RequestBody HoiDap data) {
         //TODO: process PUT request
         
-        return hoiDapService.updateHoiDap(data);
+        return ResponseEntity.ok(hoiDapService.updateHoiDap(data)==null?"Nội dung không được để trống!":"OK!");
+    }
+    
+    @GetMapping("/HoiDapFilter/{filter}")
+    public ResponseEntity HoiDapFilter(@PathVariable String filter) {
+        System.out.println("Đang lọc danh sách hỏi đáp!");
+        return ResponseEntity.ok(hoiDapService.filterHoiDap(filter));
     }
     
     

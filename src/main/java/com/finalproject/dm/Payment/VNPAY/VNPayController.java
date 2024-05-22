@@ -2,13 +2,14 @@ package com.finalproject.dm.Payment.VNPAY;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.websocket.server.PathParam;
+import net.glxn.qrgen.QRCode;
+import net.glxn.qrgen.image.ImageType;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -22,11 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -125,6 +125,16 @@ public class VNPayController {
             }
         }
         return ResponseEntity.badRequest().body("Lỗi thanh toán!");
+    }
+ 
+    @GetMapping(value = "/generateQRCode", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] generateQRCodeImage(@RequestParam String amount, @RequestParam String description) {
+        String vnpayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Version=2.0.0&vnp_TmnCode=YOUR_TMNCODE&vnp_Amount="
+                + amount + "&vnp_Command=pay&vnp_CreateDate=20220427104919&vnp_CurrCode=VND&vnp_IpAddr=127.0.0.1&vnp_Locale=vn&vnp_OrderInfo="
+                + description + "&vnp_OrderType=topup&vnp_ReturnUrl=https://sandbox.vnpayment.vn/&vnp_TxnRef=123456789&vnp_TxnType=01&vnp_VersionCode=2.0.0&vnp_SecureHashType=SHA256";
+
+        ByteArrayOutputStream stream = QRCode.from(vnpayUrl).to(ImageType.PNG).stream();
+        return stream.toByteArray();
     }
     
 }

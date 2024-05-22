@@ -43,9 +43,10 @@ public class KhaiBaoTamTruService {
         kbtt.setYKien(data.getYKien());
         kbtt.setFileHoSoLienQuan(data.getFileHoSoLienQuan());
         kbtt.setLePhi(data.getLePhi());
-        kbtt.setTrangThai("Checking");
+        kbtt.setTrangThai(data.getTrangThai());
         kbtt.setIdNguoiDuyet(data.getIdNguoiDuyet());
         kbtt.setCreated_at(LocalDateTime.now());
+        kbtt.setNote(data.getNote());
         return repo.save(kbtt);
     }
 

@@ -16,4 +16,7 @@ public interface ThongTinUserRepo extends MongoRepository<ThongTinUser,String> {
     // @Query("select * from thongTinUser where idUser=?")
     List<ThongTinUser> findByIdUser(String idUser);
 
+    @Query("{'idUser':?0}")
+    ThongTinUser getByIdUser(String idUser);
+
 }

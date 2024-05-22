@@ -1,6 +1,8 @@
 package com.finalproject.dm.Filter.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +13,14 @@ import org.springframework.stereotype.Service;
 
 import com.finalproject.dm.Filter.Model.FormQuanLyHoSo;
 import com.finalproject.dm.Filter.Model.QuanLyHoSoUser;
+import com.finalproject.dm.Model.DiaChi;
 import com.finalproject.dm.Model.GiaHanTamTru;
 import com.finalproject.dm.Model.KhaiBaoTamTru;
 import com.finalproject.dm.Model.KhaiBaoTamVang;
 import com.finalproject.dm.Model.KhaiBaoThuongTru;
 import com.finalproject.dm.Model.ThongBaoLuuTru;
 import com.finalproject.dm.Model.ThongKeDoanhThu;
+import com.finalproject.dm.Model.ThongTinUser;
 import com.finalproject.dm.Model.User;
 import com.finalproject.dm.Model.XoaDangKyTamTru;
 import com.finalproject.dm.Model.XoaDangKyThuongTru;
@@ -26,6 +30,7 @@ import com.finalproject.dm.Repository.KhaiBaoTamVangRepo;
 import com.finalproject.dm.Repository.KhaiBaoThuongTruRepo;
 import com.finalproject.dm.Repository.ThongBaoLuuTruRepo;
 import com.finalproject.dm.Repository.ThongKeDoanhThuRepo;
+import com.finalproject.dm.Repository.ThongTinUserRepo;
 import com.finalproject.dm.Repository.UserRepo;
 import com.finalproject.dm.Repository.XoaDangKyTamTruRepo;
 import com.finalproject.dm.Repository.XoaDangKyThuongTruRepo;
@@ -50,6 +55,8 @@ public class QuanLyHoSoUserService {
     private KhaiBaoTamVangRepo khaiBaoTamVangRepo;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private ThongTinUserRepo thongTinUserRepo;
     @Autowired
     private ThongKeDoanhThuRepo thongKeDoanhThuRepo;
     @Autowired
@@ -256,14 +263,104 @@ public class QuanLyHoSoUserService {
         return ResponseEntity.ok(xoaDangKyThuongTruRepo.findById(data.getId()).get());
     }
 
+    public QuanLyHoSoUser getAllHoSoPheDuyet(DiaChi coQuanThucHien){
+        Sort sort= Sort.by(Sort.Direction.ASC, "created_at");;
+        System.out.println("Get All Ho So Checking");
+        QuanLyHoSoUser data = new QuanLyHoSoUser();
+        data.setGiaHanTamTrus(giaHanTamTruRepo.getAllByPheDuyetByDiaChiIdUser("Checking",coQuanThucHien,sort));
+        data.setKhaiBaoTamTrus(khaiBaoTamTruRepo.getAllByPheDuyetByDiaChiIdUser("Checking",coQuanThucHien,sort));
+        data.setKhaiBaoTamVangs(khaiBaoTamVangRepo.getAllByPheDuyetByDiaChiIdUser("Checking",coQuanThucHien,sort));
+        data.setKhaiBaoThuongTrus(khaiBaoThuongTruRepo.getAllByPheDuyetByDiaChiIdUser("Checking",coQuanThucHien,sort));
+        data.setThongBaoLuuTrus(thongBaoLuuTruRepo.getAllByPheDuyetByDiaChiIdUser("Checking",coQuanThucHien,sort));
+        data.setXoaDangKyTamTrus(xoaDangKyTamTruRepo.getAllByPheDuyetByDiaChiIdUser("Checking",coQuanThucHien,sort));
+        data.setXoaDangKyThuongTrus(xoaDangKyThuongTruRepo.getAllByPheDuyetByDiaChiIdUser("Checking",coQuanThucHien,sort));
+        return data;
+    }
+    public ResponseEntity getHoSoPheDuyetByDiaChi(String idUser,DiaChi diaChi){
+  
+        User user = new User();
+        // System.out.println(data.get(0));
+        if (!userRepo.findById(idUser).isPresent())  return ResponseEntity.badRequest().body("User không tồn tại!");
+        QuanLyHoSoUser temp = getAll(idUser);
+        List<FormQuanLyHoSo> dt= new ArrayList<FormQuanLyHoSo>();
+        for (GiaHanTamTru t : temp.getGiaHanTamTrus()) {
+            FormQuanLyHoSo tm = new FormQuanLyHoSo();
+            tm.setId(t.getId());
+            tm.setTenThuTuc(t.getTenThuTuc());
+            tm.setNgayTao(t.getCreated_at());
+            tm.setTrangThai(t.getTrangThai());
+            dt.add(tm);
+        }
+        for (KhaiBaoTamTru t : temp.getKhaiBaoTamTrus()) {
+            FormQuanLyHoSo tm = new FormQuanLyHoSo();
+            tm.setId(t.getId());
+            tm.setTenThuTuc(t.getTenThuTuc());
+            tm.setNgayTao(t.getCreated_at());
+            tm.setTrangThai(t.getTrangThai());
+            dt.add(tm);
+        }
+        for (KhaiBaoTamVang t : temp.getKhaiBaoTamVangs()) {
+            FormQuanLyHoSo tm = new FormQuanLyHoSo();
+            tm.setId(t.getId());
+            tm.setTenThuTuc(t.getTenThuTuc());
+            tm.setNgayTao(t.getCreated_at());
+            tm.setTrangThai(t.getTrangThai());
+            dt.add(tm);
+        }
+        for (KhaiBaoThuongTru t : temp.getKhaiBaoThuongTrus()) {
+            FormQuanLyHoSo tm = new FormQuanLyHoSo();
+            tm.setId(t.getId());
+            tm.setTenThuTuc(t.getTenThuTuc());
+            tm.setNgayTao(t.getCreated_at());
+            tm.setTrangThai(t.getTrangThai());
+            dt.add(tm);
+        }
+        for (ThongBaoLuuTru t : temp.getThongBaoLuuTrus()) {
+            FormQuanLyHoSo tm = new FormQuanLyHoSo();
+            tm.setId(t.getId());
+            tm.setTenThuTuc(t.getTenThuTuc());
+            tm.setNgayTao(t.getCreated_at());
+            tm.setTrangThai(t.getTrangThai());
+            dt.add(tm);
+        }
+        for (XoaDangKyTamTru t : temp.getXoaDangKyTamTrus()) {
+            FormQuanLyHoSo tm = new FormQuanLyHoSo();
+            tm.setId(t.getId());
+            tm.setTenThuTuc(t.getTenThuTuc());
+            tm.setNgayTao(t.getCreated_at());
+            tm.setTrangThai(t.getTrangThai());
+            dt.add(tm);
+        }
+        for (XoaDangKyThuongTru t : temp.getXoaDangKyThuongTrus()) {
+            FormQuanLyHoSo tm = new FormQuanLyHoSo();
+            tm.setId(t.getId());
+            tm.setTenThuTuc(t.getTenThuTuc());
+            tm.setNgayTao(t.getCreated_at());
+            tm.setTrangThai(t.getTrangThai());
+            dt.add(tm);
+        }
+        return ResponseEntity.ok(dt);
+    } 
+
     public ResponseEntity updateDoneHoSo(String id){
 
         if (giaHanTamTruRepo.findById(id).isPresent()){
             GiaHanTamTru dt = giaHanTamTruRepo.findById(id).get();
             System.out.println(dt);
             dt.setTrangThai("Done");
-            dt.setUpdated_at(LocalDateTime.now());
+            dt.setCreated_at(LocalDateTime.now());
             giaHanTamTruRepo.save(dt);
+            ThongTinUser ttUser = thongTinUserRepo.getByIdUser(dt.getIdUser());
+            Integer tmp = dt.getThoiHanTamTru();
+            LocalDate currentDate = LocalDate.now();
+        
+            // Cộng thêm 60 ngày
+            LocalDate futureDate = currentDate.plusDays(tmp);
+            
+            // Định dạng ngày
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            ttUser.setThoiHanTamTru(formatter.format(futureDate));
+            thongTinUserRepo.save(ttUser);
             int thang = LocalDateTime.now().getMonthValue();
             int nam = LocalDateTime.now().getYear();
             ThongKeDoanhThu tk = thongKeDoanhThuService.getDoanhThuByThangNamCoQuan(thang, nam, dt.getCoQuanThucHien());
@@ -306,7 +403,19 @@ public class QuanLyHoSoUserService {
             dt.setTrangThai("Done");
             dt.setUpdated_at(LocalDateTime.now());
             khaiBaoTamTruRepo.save(dt);
-
+            ThongTinUser ttUser = thongTinUserRepo.getByIdUser(dt.getIdUser());
+            ttUser.setTamTru(dt.getDiaChiTamTru());
+            ttUser.setDiaChiTTCuThe(dt.getDiaChiCuThe());
+            Integer tmp = dt.getThoiHanTamTru();
+            LocalDate currentDate = LocalDate.now();
+        
+            // Cộng thêm 60 ngày
+            LocalDate futureDate = currentDate.plusDays(tmp);
+            
+            // Định dạng ngày
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            ttUser.setThoiHanTamTru(formatter.format(futureDate));
+            thongTinUserRepo.save(ttUser);
             int thang = LocalDateTime.now().getMonthValue();
             int nam = LocalDateTime.now().getYear();
             ThongKeDoanhThu tk = thongKeDoanhThuService.getDoanhThuByThangNamCoQuan(thang, nam, dt.getCoQuanThucHien());
@@ -328,7 +437,9 @@ public class QuanLyHoSoUserService {
             dt.setTrangThai("Done");
             dt.setUpdated_at(LocalDateTime.now());
             khaiBaoTamVangRepo.save(dt);
-
+            ThongTinUser ttUser = thongTinUserRepo.getByIdUser(dt.getIdUser());
+            ttUser.setNoiKhaiBaoTamVang(dt.getDiaChi());
+            thongTinUserRepo.save(ttUser);
             int thang = LocalDateTime.now().getMonthValue();
             int nam = LocalDateTime.now().getYear();
             ThongKeDoanhThu tk = thongKeDoanhThuService.getDoanhThuByThangNamCoQuan(thang, nam, dt.getCoQuanThucHien());
@@ -350,7 +461,9 @@ public class QuanLyHoSoUserService {
             dt.setTrangThai("Done");
             dt.setUpdated_at(LocalDateTime.now());
             khaiBaoThuongTruRepo.save(dt);
-
+            ThongTinUser ttUser = thongTinUserRepo.getByIdUser(dt.getIdUser());
+            ttUser.setThuongTru(dt.getDiaChiThuongTru());
+            thongTinUserRepo.save(ttUser);
             int thang = LocalDateTime.now().getMonthValue();
             int nam = LocalDateTime.now().getYear();
             ThongKeDoanhThu tk = thongKeDoanhThuService.getDoanhThuByThangNamCoQuan(thang, nam, dt.getCoQuanThucHien());
@@ -372,6 +485,11 @@ public class QuanLyHoSoUserService {
             dt.setTrangThai("Done");
             dt.setUpdated_at(LocalDateTime.now());
             xoaDangKyTamTruRepo.save(dt);
+            ThongTinUser ttUser = thongTinUserRepo.getByIdUser(dt.getIdUser());
+            ttUser.setTamTru(new DiaChi());
+            ttUser.setDiaChiTTCuThe("");
+            ttUser.setThoiHanTamTru("0");
+            thongTinUserRepo.save(ttUser);
             int thang = LocalDateTime.now().getMonthValue();
             int nam = LocalDateTime.now().getYear();
             ThongKeDoanhThu tk = thongKeDoanhThuService.getDoanhThuByThangNamCoQuan(thang, nam, dt.getCoQuanThucHien());
@@ -393,7 +511,9 @@ public class QuanLyHoSoUserService {
             dt.setTrangThai("Done");
             dt.setUpdated_at(LocalDateTime.now());
             xoaDangKyThuongTruRepo.save(dt);
-
+            ThongTinUser ttUser = thongTinUserRepo.getByIdUser(dt.getIdUser());
+            ttUser.setThuongTru(new DiaChi());
+            thongTinUserRepo.save(ttUser);
             int thang = LocalDateTime.now().getMonthValue();
             int nam = LocalDateTime.now().getYear();
             ThongKeDoanhThu tk = thongKeDoanhThuService.getDoanhThuByThangNamCoQuan(thang, nam, dt.getCoQuanThucHien());

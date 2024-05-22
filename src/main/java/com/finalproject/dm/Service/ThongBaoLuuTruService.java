@@ -40,8 +40,9 @@ public class ThongBaoLuuTruService {
         tblt.setDiaChiCuThe(data.getDiaChiCuThe());
         tblt.setFileHoSoLienQuan(data.getFileHoSoLienQuan());
         tblt.setLePhi(data.getLePhi());
-        tblt.setTrangThai("Checking");
+        tblt.setTrangThai(data.getTrangThai());
         tblt.setIdNguoiDuyet(data.getIdNguoiDuyet());
+        tblt.setNote(tblt.getNote());
         tblt.setCreated_at(LocalDateTime.now());
         return repo.save(tblt);
     }

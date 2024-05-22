@@ -21,7 +21,8 @@ public class FileHoSo {
         private String HS4;
         private String HS5;
         private String HS6;
-        private String HS7;
+        private String HS7;            
+        
         private String HS8;
 
 }
